@@ -27,6 +27,7 @@ object RecFun extends RecFunInterface:
     def count(flag: Int, list: List[Char]): Boolean = {
       if (flag < 0) false
       else if (list.isEmpty && flag == 0) true
+      else if (list.isEmpty && flag > 0) false
       else list.head match {
         case '(' => count(flag+1, list.tail)
         case ')' => count(flag-1, list.tail)
