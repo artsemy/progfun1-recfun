@@ -2,7 +2,7 @@ package recfun
 
 import scala.annotation.tailrec
 
-object RecFun extends RecFunInterface:
+object RecFun extends RecFunInterface :
 
   def main(args: Array[String]): Unit =
     println("Pascal's Triangle")
@@ -14,43 +14,44 @@ object RecFun extends RecFunInterface:
   /**
    * Exercise 1
    */
-  def pascal(c: Int, r: Int): Int = {
-    if (c == 0 || c == r) 1
-    else pascal(c-1, r-1) + pascal(c, r-1)
-  }
+  def pascal(c: Int, r: Int): Int =
+    if c == 0 || c == r then
+      1
+    else
+      pascal(c - 1, r - 1) + pascal(c, r - 1)
 
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = {
+  def balance(chars: List[Char]): Boolean =
     @tailrec
-    def count(flag: Int, list: List[Char]): Boolean = {
-      if (flag < 0) false
-      else if (list.isEmpty && flag == 0) true
-      else if (list.isEmpty && flag > 0) false
-      else list.head match {
-        case '(' => count(flag+1, list.tail)
-        case ')' => count(flag-1, list.tail)
-        case _ => count(flag, list.tail)
-      }
-    }
-    count(0, chars)
-  }
+    def loop(nestingLevel: Int, restChars: List[Char]): Boolean =
+      if nestingLevel < 0 then
+        false
+      else if restChars.isEmpty && nestingLevel == 0 then
+        true
+      else if restChars.isEmpty && nestingLevel > 0 then
+        false
+      else restChars.head match
+        case '(' => loop(nestingLevel + 1, restChars.tail)
+        case ')' => loop(nestingLevel - 1, restChars.tail)
+        case _ => loop(nestingLevel, restChars.tail)
+
+    loop(0, chars)
 
 
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = {
-    (money, coins) match {
-      case (m, l) if m == 0 || l.isEmpty => 0
-      case (m, l) =>
-        val newMoney = m - l.head
-        if (newMoney == 0) 1 + countChange(m, l.tail)
-        else if (newMoney < 0) countChange(m, l.tail)
-        else countChange(newMoney, l) + countChange(m, l.tail)
-    }
-  }
+  def countChange(money: Int, coins: List[Int]): Int =
+    if money == 0 || coins.isEmpty then
+      0
+    else
+      val newMoney = money - coins.head
+      if newMoney == 0 then
+        1 + countChange(money, coins.tail)
+      else if newMoney < 0 then
+        countChange(money, coins.tail)
+      else
+        countChange(newMoney, coins) + countChange(money, coins.tail)
 
-//import RecFun._
-//@main def run(): Unit = println(countChange(4, List(1,2)))
