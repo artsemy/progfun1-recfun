@@ -25,19 +25,15 @@ object RecFun extends RecFunInterface :
    */
   def balance(chars: List[Char]): Boolean =
     @tailrec
-    def loop(nestingLevel: Int, restChars: List[Char]): Boolean =
-      if nestingLevel < 0 then
-        false
-      else if restChars.isEmpty && nestingLevel == 0 then
-        true
-      else if restChars.isEmpty && nestingLevel > 0 then
-        false
-      else restChars.head match
-        case '(' => loop(nestingLevel + 1, restChars.tail)
-        case ')' => loop(nestingLevel - 1, restChars.tail)
-        case _ => loop(nestingLevel, restChars.tail)
+    def loop(restChars: List[Char], nestingLevel: Int): Boolean =
+      (restChars, nestingLevel) match
+        case (Nil, nl) => nl == 0
+        case (_, -1) => false // nestingLevel != -1 // impossible
+        case ('(' :: tail, nl) => loop(tail, nl + 1)
+        case (')' :: tail, nl) => loop(tail, nl - 1)
+        case (ch :: tail, nl) => loop(tail, nl)
 
-    loop(0, chars)
+    loop(chars, 0)
 
 
   /**
