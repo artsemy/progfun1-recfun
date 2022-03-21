@@ -40,14 +40,10 @@ object RecFun extends RecFunInterface :
    * Exercise 3
    */
   def countChange(money: Int, coins: List[Int]): Int =
-    if money == 0 || coins.isEmpty then
+    if money == 0 && coins.nonEmpty then
+      1
+    else if money < 0 || coins.isEmpty then
       0
     else
-      val newMoney = money - coins.head
-      if newMoney == 0 then
-        1 + countChange(money, coins.tail)
-      else if newMoney < 0 then
-        countChange(money, coins.tail)
-      else
-        countChange(newMoney, coins) + countChange(money, coins.tail)
+      countChange(money - coins.head, coins) + countChange(money, coins.tail)
 
