@@ -24,14 +24,18 @@ object RecFun extends RecFunInterface :
    * Exercise 2
    */
   def balance(chars: List[Char]): Boolean =
+
+    def nesting(ch: Char): Int =
+      ch match
+        case '(' => 1
+        case ')' => -1
+        case _ => 0
+
     @tailrec
     def loop(restChars: List[Char], nestingLevel: Int): Boolean =
-      (restChars, nestingLevel) match
-        case (Nil, nl) => nl == 0
-        case (_, -1) => false // nestingLevel != -1 // impossible
-        case ('(' :: tail, nl) => loop(tail, nl + 1)
-        case (')' :: tail, nl) => loop(tail, nl - 1)
-        case (ch :: tail, nl) => loop(tail, nl)
+      restChars.isEmpty && nestingLevel == 0 ||
+        (restChars.nonEmpty && nestingLevel >= 0) &&
+          loop(restChars.tail, nestingLevel + nesting(restChars.head))
 
     loop(chars, 0)
 
